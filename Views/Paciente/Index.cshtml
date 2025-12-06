@@ -1,0 +1,238 @@
+@{
+    ViewData["Title"] = "Pacientes";
+}
+
+<div class="container mt-4">
+    <div class="card">
+        <div class="card-header">
+            <div class="d-flex justify-content-between align-items-center">
+                <h4 class="mb-0"><i class="fas fa-users"></i> Gestión de Pacientes</h4>
+                <button class="btn btn-light" onclick="abrirModalCrear()">
+                    <i class="fas fa-plus"></i> Nuevo Paciente
+                </button>
+            </div>
+        </div>
+        <div class="card-body">
+            <table id="tablePacientes" class="table table-striped table-hover">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Nombre completo</th>
+                        <th>Edad</th>
+                        <th>DNI</th>
+                        <th>Fecha Nac.</th>
+                        <th>Sexo</th>
+                        <th>Dirección</th>
+                        <th>Teléfono</th>
+                        <th>Email</th>
+                        <th>Grupo Sanguíneo</th>
+                        <th>Estado</th>
+                        <th>Fecha Registro</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        let tablePacientes;
+
+        $(document).ready(function() {
+            cargarTabla();
+            cargarGrupoSanguineo();
+        });
+
+        function cargarTabla() {
+            if ($.fn.DataTable.isDataTable('#tablePacientes')) {
+                $('#tablePacientes').DataTable().destroy();
+            }
+            tablePacientes = $('#tablePacientes').DataTable({
+                ajax: { 
+                    url: '/Paciente/Listar', 
+                    dataSrc: '',
+                    error: function(xhr, status, error) {
+                        console.error('Error AJAX Pacientes:', status, error, xhr.responseText);
+                        Swal.fire('Error', 'No se pudieron cargar los pacientes. Revisa el servidor.', 'error');
+                    }
+                },
+                columns: [
+                    { data: 'idPaciente' },
+                    { data: 'nombreCompleto', defaultContent: '', render: function(data, type, row){ if(data) return data; return (row.nombres || '') + ' ' + (row.apellidos || ''); } },
+                    { data: 'edad', defaultContent: '', render: function(data, type, row){ if(data !== undefined && data !== null) return data; if(row.fechaNacimiento) { var today=new Date(); var birth=new Date(row.fechaNacimiento); var age = today.getFullYear()-birth.getFullYear(); if (birth.getMonth()>today.getMonth() || (birth.getMonth()===today.getMonth() && birth.getDate()>today.getDate())) age--; return age; } return ''; } },
+                    { data: 'dni' },
+                    { data: 'fechaNacimiento', render: function(data) { return data ? new Date(data).toLocaleDateString() : ''; } },
+                    { data: 'sexo', defaultContent: '' },
+                    { data: 'direccion', defaultContent: '' },
+                    { data: 'telefono', defaultContent: '' },
+                    { data: 'email', defaultContent: '' },
+                    { data: 'grupoSanguineo', defaultContent: '' },
+                    { data: 'activo', render: data => data ? '<span class="badge bg-success">Activo</span>' : '<span class="badge bg-danger">Inactivo</span>' },
+                    { data: 'fechaRegistro', render: function(data) { return data ? new Date(data).toLocaleDateString() : ''; } },
+                    { data: null, render: function(data) {
+                        return `<button class="btn btn-sm btn-warning me-1" onclick="editarPaciente(${data.idPaciente})"><i class="fas fa-edit"></i></button>` +
+                               `<button class="btn btn-sm btn-danger" onclick="eliminarPaciente(${data.idPaciente})"><i class="fas fa-trash"></i></button>`;
+                    }}
+                ],
+                language: { url: '//cdn.datatables.net/plug-ins/1.13.7/i18n/es-ES.json' }
+            });
+        }
+
+        function abrirModalCrear() {
+            $('#modalTitle').text('Nuevo Paciente');
+            $('#formPaciente')[0].reset();
+            $('#pacienteId').val(0);
+            $('#activo').val('true');
+            // Por defecto seleccionar O+
+            $('#grupoSanguineo').val('O+');
+            $('#modalPaciente').modal('show');
+        }
+
+        function editarPaciente(id) {
+            $.get('/Paciente/Obtener?id=' + id, function(data) {
+                if (!data || data.success === false) {
+                    Swal.fire('Error', data?.message || 'No se pudo obtener el paciente', 'error');
+                    return;
+                }
+                $('#modalTitle').text('Editar Paciente');
+                $('#pacienteId').val(data.idPaciente);
+                $('#nombres').val(data.nombres);
+                $('#apellidos').val(data.apellidos);
+                $('#dni').val(data.dni);
+                $('#fechaNacimiento').val(data.fechaNacimiento ? data.fechaNacimiento.split('T')[0] : '');
+                $('#sexo').val(data.sexo || '');
+                $('#direccion').val(data.direccion || '');
+                $('#telefono').val(data.telefono || '');
+                $('#email').val(data.email || '');
+                $('#grupoSanguineo').val(data.grupoSanguineo || '');
+                $('#activo').val(data.activo.toString());
+                $('#modalPaciente').modal('show');
+            });
+        }
+
+        function cargarGrupoSanguineo() {
+            // Carga la lista desde el backend y la coloca en el select
+            $.get('/GrupoSanguineo/Listar', function(data) {
+                if (!Array.isArray(data)) return;
+                const $sel = $('#grupoSanguineo');
+                $sel.empty();
+                $sel.append('<option value="">-- Seleccionar --</option>');
+                data.forEach(item => {
+                    if (item.activo) {
+                        const text = item.codigo + (item.nombre ? ' - ' + item.nombre : '');
+                        $sel.append(`<option value="${item.codigo}">${text}</option>`);
+                    }
+                });
+                // Asegurar que el nuevo paciente muestre O+ por defecto
+                if (!$('#pacienteId').val() || $('#pacienteId').val() === '0') {
+                    $sel.val('O+');
+                }
+            }).fail(function() {
+                console.warn('No se pudo cargar GrupoSanguineo');
+            });
+        }
+
+        function guardarPaciente() {
+            const payload = {
+                idPaciente: parseInt($('#pacienteId').val() || '0'),
+                nombres: $('#nombres').val(),
+                apellidos: $('#apellidos').val(),
+                dni: $('#dni').val(),
+                fechaNacimiento: $('#fechaNacimiento').val() || null,
+                sexo: $('#sexo').val() || null,
+                direccion: $('#direccion').val() || null,
+                telefono: $('#telefono').val() || null,
+                email: $('#email').val() || null,
+                grupoSanguineo: $('#grupoSanguineo').val() || null,
+                activo: $('#activo').val() === 'true'
+            };
+
+            $.ajax({
+                url: '/Paciente/Guardar',
+                type: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify(payload),
+                success: function(response) {
+                    if (response.success) {
+                        Swal.fire('Éxito', response.message, 'success');
+                        $('#modalPaciente').modal('hide');
+                        cargarTabla();
+                    } else {
+                        Swal.fire('Error', response.message || 'No se pudo guardar', 'error');
+                    }
+                },
+                error: function(xhr) {
+                    Swal.fire('Error', xhr.responseText || 'Error del servidor', 'error');
+                }
+            });
+        }
+
+        function eliminarPaciente(id) {
+            Swal.fire({
+                title: '¿Estás seguro?',
+                text: 'Esta acción no se puede revertir',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'Sí, eliminar'
+            }).then(result => {
+                if (result.isConfirmed) {
+                    $.post('/Paciente/Eliminar', { id: id }, function(response) {
+                        if (response.success) {
+                            Swal.fire('Eliminado', response.message, 'success');
+                            cargarTabla();
+                        } else {
+                            Swal.fire('Error', response.message, 'error');
+                        }
+                    });
+                }
+            });
+        }
+    </script>
+
+    <!-- Modal Paciente -->
+    <div class="modal fade" id="modalPaciente" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modalTitle">Nuevo Paciente</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="formPaciente">
+                        <input type="hidden" id="pacienteId" name="IdPaciente" value="0">
+                        <div class="mb-3"><label class="form-label">Nombres</label><input type="text" class="form-control" id="nombres" name="Nombres" required></div>
+                        <div class="mb-3"><label class="form-label">Apellidos</label><input type="text" class="form-control" id="apellidos" name="Apellidos" required></div>
+                        <div class="mb-3"><label class="form-label">DNI</label><input type="text" class="form-control" id="dni" name="DNI" required></div>
+                        <div class="mb-3"><label class="form-label">Fecha de Nacimiento</label><input type="date" class="form-control" id="fechaNacimiento" name="FechaNacimiento"></div>
+                        <div class="mb-3"><label class="form-label">Sexo</label><select id="sexo" name="Sexo" class="form-select"><option value="">--</option><option value="M">M</option><option value="F">F</option></select></div>
+                        <div class="mb-3"><label class="form-label">Dirección</label><input type="text" class="form-control" id="direccion" name="Direccion"></div>
+                        <div class="mb-3"><label class="form-label">Teléfono</label><input type="text" class="form-control" id="telefono" name="Telefono"></div>
+                        <div class="mb-3"><label class="form-label">Email</label><input type="email" class="form-control" id="email" name="Email"></div>
+                        <div class="mb-3">
+                            <label class="form-label">Grupo Sanguíneo</label>
+                            <select id="grupoSanguineo" name="GrupoSanguineo" class="form-select">
+                                <option value="">-- Seleccionar --</option>
+                                <option value="O+">O+</option>
+                                <option value="O-">O-</option>
+                                <option value="A+">A+</option>
+                                <option value="A-">A-</option>
+                                <option value="B+">B+</option>
+                                <option value="B-">B-</option>
+                                <option value="AB+">AB+</option>
+                                <option value="AB-">AB-</option>
+                            </select>
+                        </div>
+                        <div class="mb-3"><label class="form-label">Estado</label><select id="activo" name="Activo" class="form-select"><option value="true">Activo</option><option value="false">Inactivo</option></select></div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-primary" onclick="guardarPaciente()">Guardar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+}

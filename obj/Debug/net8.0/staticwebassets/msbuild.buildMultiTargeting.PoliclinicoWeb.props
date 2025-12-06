@@ -1,0 +1,3 @@
+﻿<Project>
+  <Import Project="..\build\PoliclinicoWeb.props" />
+</Project>

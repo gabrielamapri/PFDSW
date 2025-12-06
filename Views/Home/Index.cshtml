@@ -1,0 +1,135 @@
+@{
+    ViewData["Title"] = "Inicio";
+}
+
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="text-center bg-white p-5 rounded shadow">
+                <h1 class="display-4 text-primary-gradient">
+                    <i class="fas fa-hospital"></i> 
+                    Bienvenido al Sistema Policlínico
+                </h1>
+                <p class="lead text-muted">Sistema de gestión integral para policlínico</p>
+                <hr class="my-4">
+                
+                @if (ViewBag.TipoUsuario == "Admin")
+                {
+                    <p class="fs-5">Panel de administración</p>
+                    <div class="row mt-4 g-4">
+                        <div class="col-md-3">
+                            <div class="card text-center h-100">
+                                <div class="card-body">
+                                    <div class="icon-box primary mb-3">
+                                        <i class="fas fa-stethoscope"></i>
+                                    </div>
+                                    <h5 class="card-title">Especialidades</h5>
+                                    <p class="card-text text-muted">Gestionar especialidades médicas</p>
+                                    <a href="/Especialidad/Index" class="btn btn-primary">
+                                        <i class="fas fa-cog"></i> Gestionar
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="card text-center h-100">
+                                <div class="card-body">
+                                    <div class="icon-box success mb-3">
+                                        <i class="fas fa-user-md"></i>
+                                    </div>
+                                    <h5 class="card-title">Doctores</h5>
+                                    <p class="card-text text-muted">Administrar doctores</p>
+                                    <a href="/Doctor/Index" class="btn btn-success">
+                                        <i class="fas fa-cog"></i> Gestionar
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="card text-center h-100">
+                                <div class="card-body">
+                                    <div class="icon-box info mb-3">
+                                        <i class="fas fa-users"></i>
+                                    </div>
+                                    <h5 class="card-title">Pacientes</h5>
+                                    <p class="card-text text-muted">Gestionar pacientes</p>
+                                    <a href="/Paciente/Index" class="btn btn-info text-white">
+                                        <i class="fas fa-cog"></i> Gestionar
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="card text-center h-100">
+                                <div class="card-body">
+                                    <div class="icon-box warning mb-3">
+                                        <i class="fas fa-chart-bar"></i>
+                                    </div>
+                                    <h5 class="card-title">Reportes</h5>
+                                    <p class="card-text text-muted">Ver estadísticas</p>
+                                    <a href="/Reporte/Index" class="btn btn-warning text-dark">
+                                        <i class="fas fa-chart-line"></i> Ver Reportes
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+                else if (ViewBag.TipoUsuario == "Doctor")
+                {
+                    <p class="fs-5">Bienvenido Dr(a). <strong>@ViewBag.NombreCompleto</strong></p>
+                    <div class="row mt-4 g-4">
+                        <div class="col-md-6 offset-md-3">
+                            <div class="card text-center">
+                                <div class="card-body p-4">
+                                    <div class="icon-box primary mb-3">
+                                        <i class="fas fa-calendar-alt"></i>
+                                    </div>
+                                    <h5 class="card-title">Mi Agenda</h5>
+                                    <p class="card-text">Gestiona tus citas y horarios</p>
+                                    <a href="/Cita/MiAgenda" class="btn btn-primary btn-lg">
+                                        <i class="fas fa-calendar-check"></i> Ver Agenda
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+                else if (ViewBag.TipoUsuario == "Paciente")
+                {
+                    <p class="fs-5">Bienvenido <strong>@ViewBag.NombreCompleto</strong></p>
+                    <div class="row mt-4 g-4">
+                        <div class="col-md-6">
+                            <div class="card text-center h-100">
+                                <div class="card-body p-4">
+                                    <div class="icon-box primary mb-3">
+                                        <i class="fas fa-calendar-plus"></i>
+                                    </div>
+                                    <h5 class="card-title">Reservar Cita</h5>
+                                    <p class="card-text">Agenda una nueva cita médica</p>
+                                    <a href="/Cita/ReservarCita" class="btn btn-primary btn-lg">
+                                        <i class="fas fa-plus"></i> Nueva Cita
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="card text-center h-100">
+                                <div class="card-body p-4">
+                                    <div class="icon-box info mb-3">
+                                        <i class="fas fa-calendar-check"></i>
+                                    </div>
+                                    <h5 class="card-title">Mis Citas</h5>
+                                    <p class="card-text">Ver tus citas programadas</p>
+                                    <a href="/Cita/MisCitas" class="btn btn-info btn-lg text-white">
+                                        <i class="fas fa-list"></i> Ver Citas
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>

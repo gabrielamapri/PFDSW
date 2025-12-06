@@ -1,0 +1,242 @@
+@{
+    ViewData["Title"] = "Doctores";
+}
+
+<div class="container mt-4">
+    <div class="card">
+        <div class="card-header">
+            <div class="d-flex justify-content-between align-items-center">
+                <h4 class="mb-0"><i class="fas fa-user-md"></i> Gestión de Doctores</h4>
+                <button class="btn btn-light" onclick="abrirModalCrear()">
+                    <i class="fas fa-plus"></i> Nuevo Doctor
+                </button>
+            </div>
+        </div>
+        <div class="card-body">
+            <table id="tableDoctores" class="table table-striped table-hover">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Nombres</th>
+                        <th>Apellidos</th>
+                        <th>Especialidad</th>
+                        <th>DNI</th>
+                        <th>Teléfono</th>
+                        <th>Email</th>
+                        <th>CMP</th>
+                        <th>RNE</th>
+                        <th>Dirección</th>
+                        <th>Estado</th>
+                        <th>Fecha Registro</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+        <div class="modal fade" id="modalDoctor" tabindex="-1">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="modalTitle">Nuevo Doctor</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form id="formDoctor">
+                            <input type="hidden" id="doctorId" name="IdDoctor" value="0">
+                            <div class="mb-3">
+                                <label class="form-label">Nombres</label>
+                                <input type="text" class="form-control" id="nombres" name="Nombres" required>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Apellidos</label>
+                                <input type="text" class="form-control" id="apellidos" name="Apellidos" required>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">DNI</label>
+                                <input type="text" class="form-control" id="dni" name="DNI" required>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Especialidad</label>
+                                <select id="idEspecialidad" name="IdEspecialidad" class="form-select"></select>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Teléfono</label>
+                                <input type="text" class="form-control" id="telefono" name="Telefono">
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Email</label>
+                                <input type="email" class="form-control" id="email" name="Email">
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">CMP</label>
+                                <input type="text" class="form-control" id="cmp" name="CMP">
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">RNE</label>
+                                <input type="text" class="form-control" id="rne" name="RNE">
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Dirección</label>
+                                <input type="text" class="form-control" id="direccion" name="Direccion">
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Estado</label>
+                                <select id="activo" name="Activo" class="form-select">
+                                    <option value="true">Activo</option>
+                                    <option value="false">Inactivo</option>
+                                </select>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                        <button type="button" class="btn btn-primary" onclick="guardarDoctor()">Guardar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+@section Scripts {
+    <script>
+        let tableDoctores;
+
+        $(document).ready(function() {
+            cargarTabla();
+            cargarEspecialidades();
+        });
+
+        function cargarTabla() {
+            if ($.fn.DataTable.isDataTable('#tableDoctores')) {
+                $('#tableDoctores').DataTable().destroy();
+            }
+            tableDoctores = $('#tableDoctores').DataTable({
+                ajax: { url: '/Doctor/Listar', dataSrc: '' },
+                columns: [
+                    { data: 'idDoctor' },
+                    { data: 'nombres' },
+                    { data: 'apellidos' },
+                    { data: 'nombreEspecialidad' },
+                    { data: 'dni' },
+                    { data: 'telefono', defaultContent: '' },
+                    { data: 'email', defaultContent: '' },
+                    { data: 'cmp', defaultContent: '' },
+                    { data: 'rne', defaultContent: '' },
+                    { data: 'direccion', defaultContent: '' },
+                    { data: 'activo', render: data => data ? '<span class="badge bg-success">Activo</span>' : '<span class="badge bg-danger">Inactivo</span>' },
+                    { data: 'fechaRegistro', render: function(data) {
+                        if (!data) return '';
+                        // intenta formatear fecha ISO a dd/MM/yyyy
+                        const d = new Date(data);
+                        if (isNaN(d)) return data;
+                        return d.toLocaleDateString();
+                    }},
+                    { data: null, render: function(data) {
+                        return `<button class="btn btn-sm btn-warning me-1" onclick="editarDoctor(${data.idDoctor})"><i class="fas fa-edit"></i></button>
+                                <button class="btn btn-sm btn-danger" onclick="eliminarDoctor(${data.idDoctor})"><i class="fas fa-trash"></i></button>`;
+                    }}
+                ],
+                language: { url: '//cdn.datatables.net/plug-ins/1.13.7/i18n/es-ES.json' }
+            });
+        }
+
+        function abrirModalCrear() {
+            $('#modalTitle').text('Nuevo Doctor');
+            $('#formDoctor')[0].reset();
+            $('#doctorId').val(0);
+            $('#activo').val('true');
+            $('#modalDoctor').modal('show');
+        }
+
+        function editarDoctor(id) {
+            $.get('/Doctor/Obtener?id=' + id, function(data) {
+                if (!data || data.success === false) {
+                    Swal.fire('Error', data?.message || 'No se pudo obtener el doctor', 'error');
+                    return;
+                }
+                $('#modalTitle').text('Editar Doctor');
+                $('#doctorId').val(data.idDoctor);
+                $('#nombres').val(data.nombres);
+                $('#apellidos').val(data.apellidos);
+                $('#dni').val(data.dni);
+                $('#idEspecialidad').val(data.idEspecialidad);
+                $('#telefono').val(data.telefono || '');
+                $('#email').val(data.email || '');
+                $('#cmp').val(data.cMP || data.cmp || '');
+                $('#rne').val(data.rNE || data.rne || '');
+                $('#direccion').val(data.direccion || '');
+                $('#activo').val(data.activo.toString());
+                $('#modalDoctor').modal('show');
+            });
+        }
+
+        function guardarDoctor() {
+            const payload = {
+                idDoctor: parseInt($('#doctorId').val() || '0'),
+                nombres: $('#nombres').val(),
+                apellidos: $('#apellidos').val(),
+                dni: $('#dni').val(),
+                idEspecialidad: parseInt($('#idEspecialidad').val() || '0'),
+                telefono: $('#telefono').val() || null,
+                email: $('#email').val() || null,
+                cmp: $('#cmp').val() || null,
+                rne: $('#rne').val() || null,
+                direccion: $('#direccion').val() || null,
+                activo: $('#activo').val() === 'true'
+            };
+
+            $.ajax({
+                url: '/Doctor/Guardar',
+                type: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify(payload),
+                success: function(response) {
+                    if (response.success) {
+                        Swal.fire('Éxito', response.message, 'success');
+                        $('#modalDoctor').modal('hide');
+                        cargarTabla();
+                    } else {
+                        Swal.fire('Error', response.message || 'No se pudo guardar', 'error');
+                    }
+                },
+                error: function(xhr) {
+                    Swal.fire('Error', xhr.responseText || 'Error del servidor', 'error');
+                }
+            });
+        }
+
+        function eliminarDoctor(id) {
+            Swal.fire({
+                title: '¿Estás seguro?',
+                text: 'Esta acción no se puede revertir',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'Sí, eliminar'
+            }).then(result => {
+                if (result.isConfirmed) {
+                    $.post('/Doctor/Eliminar', { id: id }, function(response) {
+                        if (response.success) {
+                            Swal.fire('Eliminado', response.message, 'success');
+                            cargarTabla();
+                        } else {
+                            Swal.fire('Error', response.message, 'error');
+                        }
+                    });
+                }
+            });
+        }
+
+        function cargarEspecialidades() {
+            $.get('/Especialidad/Listar', function(data) {
+                const $sel = $('#idEspecialidad');
+                $sel.empty();
+                data.forEach(e => {
+                    $sel.append(`<option value="${e.idEspecialidad}">${e.nombre}</option>`);
+                });
+            });
+        }
+    </script>
+}

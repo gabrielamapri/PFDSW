@@ -1,0 +1,148 @@
+@model List<PoliclinicoWeb.Models.Cita>
+@{
+    ViewData["Title"] = "Mi Agenda";
+}
+
+<div class="container-fluid mt-4">
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h4 class="mb-0">
+                        <i class="fas fa-calendar-check me-2"></i>Mi Agenda de Citas
+                    </h4>
+                </div>
+                <div class="card-body">
+                    @if (Model != null && Model.Any())
+                    {
+                        <div class="table-responsive">
+                            <table id="tablaCitas" class="table table-striped table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>Fecha</th>
+                                        <th>Hora</th>
+                                        <th>Paciente</th>
+                                        <th>Motivo</th>
+                                        <th>Estado</th>
+                                        <th>Acciones</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var cita in Model)
+                                    {
+                                        <tr>
+                                            <td>@cita.FechaCita.ToString("dd/MM/yyyy")</td>
+                                            <td>@cita.HoraCita.ToString(@"hh\:mm")</td>
+                                            <td>@cita.NombrePaciente</td>
+                                            <td>@(string.IsNullOrEmpty(cita.Motivo) ? "-" : cita.Motivo)</td>
+                                            <td>
+                                                @if (cita.Estado == "Pendiente")
+                                                {
+                                                    <span class="badge bg-warning text-dark">Pendiente</span>
+                                                }
+                                                else if (cita.Estado == "Confirmada")
+                                                {
+                                                    <span class="badge bg-success">Confirmada</span>
+                                                }
+                                                else if (cita.Estado == "Atendida")
+                                                {
+                                                    <span class="badge bg-info">Atendida</span>
+                                                }
+                                                else if (cita.Estado == "Cancelada")
+                                                {
+                                                    <span class="badge bg-danger">Cancelada</span>
+                                                }
+                                            </td>
+                                            <td>
+                                                @if (cita.Estado == "Pendiente")
+                                                {
+                                                    <button class="btn btn-sm btn-success me-1" onclick="confirmarCita(@cita.IdCita)">
+                                                        <i class="fas fa-check"></i> Confirmar
+                                                    </button>
+                                                }
+                                                @if (cita.Estado == "Confirmada")
+                                                {
+                                                    <button class="btn btn-sm btn-info" onclick="marcarAtendida(@cita.IdCita)">
+                                                        <i class="fas fa-clipboard-check"></i> Atendida
+                                                    </button>
+                                                }
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="text-center py-5">
+                            <i class="fas fa-calendar-times fa-4x text-muted mb-3"></i>
+                            <p class="text-muted">No tiene citas programadas</p>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+<script>
+    $(document).ready(function() {
+        $('#tablaCitas').DataTable({
+            language: {
+                url: '//cdn.datatables.net/plug-ins/1.13.7/i18n/es-ES.json'
+            },
+            order: [[0, 'asc'], [1, 'asc']]
+        });
+    });
+
+    function confirmarCita(idCita) {
+        Swal.fire({
+            title: '¿Confirmar cita?',
+            text: 'Se notificará al paciente',
+            icon: 'question',
+            showCancelButton: true,
+            confirmButtonColor: '#28a745',
+            cancelButtonColor: '#6c757d',
+            confirmButtonText: 'Sí, confirmar',
+            cancelButtonText: 'Cancelar'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                $.post('/Cita/ConfirmarCita', { idCita: idCita }, function(response) {
+                    if (response.success) {
+                        Swal.fire('Confirmada', 'La cita ha sido confirmada', 'success')
+                            .then(() => location.reload());
+                    } else {
+                        Swal.fire('Error', response.message, 'error');
+                    }
+                });
+            }
+        });
+    }
+
+    function marcarAtendida(idCita) {
+        Swal.fire({
+            title: '¿Marcar como atendida?',
+            text: 'Esta acción registrará que el paciente fue atendido',
+            icon: 'question',
+            showCancelButton: true,
+            confirmButtonColor: '#17a2b8',
+            cancelButtonColor: '#6c757d',
+            confirmButtonText: 'Sí, marcar',
+            cancelButtonText: 'Cancelar'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                $.post('/Cita/MarcarAtendida', { idCita: idCita }, function(response) {
+                    if (response.success) {
+                        Swal.fire('Atendida', 'La cita ha sido marcada como atendida', 'success')
+                            .then(() => location.reload());
+                    } else {
+                        Swal.fire('Error', response.message, 'error');
+                    }
+                });
+            }
+        });
+    }
+</script>
+}

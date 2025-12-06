@@ -1,0 +1,49 @@
+{
+  "Files": [
+    {
+      "Id": "C:\\Users\\gabri\\PF-DSW\\PoliclinicoWeb\\wwwroot\\css\\estilos-nuevos-2025.css",
+      "PackagePath": "staticwebassets\\css\\estilos-nuevos-2025.css"
+    },
+    {
+      "Id": "C:\\Users\\gabri\\PF-DSW\\PoliclinicoWeb\\wwwroot\\css\\login.css",
+      "PackagePath": "staticwebassets\\css\\login.css"
+    },
+    {
+      "Id": "C:\\Users\\gabri\\PF-DSW\\PoliclinicoWeb\\wwwroot\\css\\site.css",
+      "PackagePath": "staticwebassets\\css\\site.css"
+    },
+    {
+      "Id": "C:\\Users\\gabri\\PF-DSW\\PoliclinicoWeb\\wwwroot\\js\\reserva-cita.js",
+      "PackagePath": "staticwebassets\\js\\reserva-cita.js"
+    },
+    {
+      "Id": "C:\\Users\\gabri\\PF-DSW\\PoliclinicoWeb\\wwwroot\\js\\site.js",
+      "PackagePath": "staticwebassets\\js\\site.js"
+    },
+    {
+      "Id": "C:\\Users\\gabri\\PF-DSW\\PoliclinicoWeb\\wwwroot\\js\\validaciones.js",
+      "PackagePath": "staticwebassets\\js\\validaciones.js"
+    },
+    {
+      "Id": "obj\\Debug\\net8.0\\staticwebassets\\msbuild.PoliclinicoWeb.Microsoft.AspNetCore.StaticWebAssetEndpoints.props",
+      "PackagePath": "build\\Microsoft.AspNetCore.StaticWebAssetEndpoints.props"
+    },
+    {
+      "Id": "obj\\Debug\\net8.0\\staticwebassets\\msbuild.PoliclinicoWeb.Microsoft.AspNetCore.StaticWebAssets.props",
+      "PackagePath": "build\\Microsoft.AspNetCore.StaticWebAssets.props"
+    },
+    {
+      "Id": "obj\\Debug\\net8.0\\staticwebassets\\msbuild.build.PoliclinicoWeb.props",
+      "PackagePath": "build\\PoliclinicoWeb.props"
+    },
+    {
+      "Id": "obj\\Debug\\net8.0\\staticwebassets\\msbuild.buildMultiTargeting.PoliclinicoWeb.props",
+      "PackagePath": "buildMultiTargeting\\PoliclinicoWeb.props"
+    },
+    {
+      "Id": "obj\\Debug\\net8.0\\staticwebassets\\msbuild.buildTransitive.PoliclinicoWeb.props",
+      "PackagePath": "buildTransitive\\PoliclinicoWeb.props"
+    }
+  ],
+  "ElementsToRemove": []
+}

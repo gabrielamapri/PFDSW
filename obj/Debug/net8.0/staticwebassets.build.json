@@ -1,0 +1,640 @@
+{
+  "Version": 1,
+  "Hash": "I97hG5AwLW/2nL5oT9P5Iw4k6Q49coMgiQBhS2IJ83I=",
+  "Source": "PoliclinicoWeb",
+  "BasePath": "_content/PoliclinicoWeb",
+  "Mode": "Default",
+  "ManifestType": "Build",
+  "ReferencedProjectsConfiguration": [],
+  "DiscoveryPatterns": [
+    {
+      "Name": "PoliclinicoWeb\\wwwroot",
+      "Source": "PoliclinicoWeb",
+      "ContentRoot": "C:\\Users\\gabri\\PF-DSW\\PoliclinicoWeb\\wwwroot\\",
+      "BasePath": "_content/PoliclinicoWeb",
+      "Pattern": "**"
+    }
+  ],
+  "Assets": [
+    {
+      "Identity": "C:\\Users\\gabri\\PF-DSW\\PoliclinicoWeb\\wwwroot\\css\\estilos-nuevos-2025.css",
+      "SourceId": "PoliclinicoWeb",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\gabri\\PF-DSW\\PoliclinicoWeb\\wwwroot\\",
+      "BasePath": "_content/PoliclinicoWeb",
+      "RelativePath": "css/estilos-nuevos-2025#[.{fingerprint}]?.css",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "Fingerprint": "vmnrjkdt2s",
+      "Integrity": "Z4NyvVe9uSIBcGCnR/++RQlFJv94f8LbsW4WASdn6LI=",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\css\\estilos-nuevos-2025.css"
+    },
+    {
+      "Identity": "C:\\Users\\gabri\\PF-DSW\\PoliclinicoWeb\\wwwroot\\css\\login.css",
+      "SourceId": "PoliclinicoWeb",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\gabri\\PF-DSW\\PoliclinicoWeb\\wwwroot\\",
+      "BasePath": "_content/PoliclinicoWeb",
+      "RelativePath": "css/login#[.{fingerprint}]?.css",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "Fingerprint": "rwyas81g3o",
+      "Integrity": "O5tgBV0htB9KiQO3jigtLyOzU8HE7qha+Rz/Q9BidR8=",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\css\\login.css"
+    },
+    {
+      "Identity": "C:\\Users\\gabri\\PF-DSW\\PoliclinicoWeb\\wwwroot\\css\\site.css",
+      "SourceId": "PoliclinicoWeb",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\gabri\\PF-DSW\\PoliclinicoWeb\\wwwroot\\",
+      "BasePath": "_content/PoliclinicoWeb",
+      "RelativePath": "css/site#[.{fingerprint}]?.css",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "Fingerprint": "4fhqdgkndy",
+      "Integrity": "ULgLjE34eR7GmWBLpuKYuiMY7Q6qxFuqAAQ03S5aglE=",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\css\\site.css"
+    },
+    {
+      "Identity": "C:\\Users\\gabri\\PF-DSW\\PoliclinicoWeb\\wwwroot\\js\\reserva-cita.js",
+      "SourceId": "PoliclinicoWeb",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\gabri\\PF-DSW\\PoliclinicoWeb\\wwwroot\\",
+      "BasePath": "_content/PoliclinicoWeb",
+      "RelativePath": "js/reserva-cita#[.{fingerprint}]?.js",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "Fingerprint": "7ozan3bw9v",
+      "Integrity": "F+bHmOKYqelCs/hVGe1xn3vCY8YUgnrLyyi6BuW1dRs=",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\js\\reserva-cita.js"
+    },
+    {
+      "Identity": "C:\\Users\\gabri\\PF-DSW\\PoliclinicoWeb\\wwwroot\\js\\site.js",
+      "SourceId": "PoliclinicoWeb",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\gabri\\PF-DSW\\PoliclinicoWeb\\wwwroot\\",
+      "BasePath": "_content/PoliclinicoWeb",
+      "RelativePath": "js/site#[.{fingerprint}]?.js",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "Fingerprint": "xo6hdlzagv",
+      "Integrity": "IY1yrWX22CVSv6FYu2fqUIujFkSv3TzRSG4+xpKB65U=",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\js\\site.js"
+    },
+    {
+      "Identity": "C:\\Users\\gabri\\PF-DSW\\PoliclinicoWeb\\wwwroot\\js\\validaciones.js",
+      "SourceId": "PoliclinicoWeb",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\gabri\\PF-DSW\\PoliclinicoWeb\\wwwroot\\",
+      "BasePath": "_content/PoliclinicoWeb",
+      "RelativePath": "js/validaciones#[.{fingerprint}]?.js",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "Fingerprint": "q8afimrf7k",
+      "Integrity": "ZkQKfEjDgP636EY7SaTd+hMI0LrBdko+5nRa8aEONK4=",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\js\\validaciones.js"
+    }
+  ],
+  "Endpoints": [
+    {
+      "Route": "css/estilos-nuevos-2025.css",
+      "AssetFile": "C:\\Users\\gabri\\PF-DSW\\PoliclinicoWeb\\wwwroot\\css\\estilos-nuevos-2025.css",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "3700"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "text/css"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"Z4NyvVe9uSIBcGCnR/++RQlFJv94f8LbsW4WASdn6LI=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Sat, 06 Dec 2025 00:27:46 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "no-cache"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "integrity",
+          "Value": "sha256-Z4NyvVe9uSIBcGCnR/++RQlFJv94f8LbsW4WASdn6LI="
+        }
+      ]
+    },
+    {
+      "Route": "css/estilos-nuevos-2025.vmnrjkdt2s.css",
+      "AssetFile": "C:\\Users\\gabri\\PF-DSW\\PoliclinicoWeb\\wwwroot\\css\\estilos-nuevos-2025.css",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "3700"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "text/css"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"Z4NyvVe9uSIBcGCnR/++RQlFJv94f8LbsW4WASdn6LI=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Sat, 06 Dec 2025 00:27:46 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=31536000, immutable"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "fingerprint",
+          "Value": "vmnrjkdt2s"
+        },
+        {
+          "Name": "label",
+          "Value": "css/estilos-nuevos-2025.css"
+        },
+        {
+          "Name": "integrity",
+          "Value": "sha256-Z4NyvVe9uSIBcGCnR/++RQlFJv94f8LbsW4WASdn6LI="
+        }
+      ]
+    },
+    {
+      "Route": "css/login.css",
+      "AssetFile": "C:\\Users\\gabri\\PF-DSW\\PoliclinicoWeb\\wwwroot\\css\\login.css",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "1817"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "text/css"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"O5tgBV0htB9KiQO3jigtLyOzU8HE7qha+Rz/Q9BidR8=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Fri, 05 Dec 2025 23:59:55 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "no-cache"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "integrity",
+          "Value": "sha256-O5tgBV0htB9KiQO3jigtLyOzU8HE7qha+Rz/Q9BidR8="
+        }
+      ]
+    },
+    {
+      "Route": "css/login.rwyas81g3o.css",
+      "AssetFile": "C:\\Users\\gabri\\PF-DSW\\PoliclinicoWeb\\wwwroot\\css\\login.css",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "1817"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "text/css"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"O5tgBV0htB9KiQO3jigtLyOzU8HE7qha+Rz/Q9BidR8=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Fri, 05 Dec 2025 23:59:55 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=31536000, immutable"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "fingerprint",
+          "Value": "rwyas81g3o"
+        },
+        {
+          "Name": "label",
+          "Value": "css/login.css"
+        },
+        {
+          "Name": "integrity",
+          "Value": "sha256-O5tgBV0htB9KiQO3jigtLyOzU8HE7qha+Rz/Q9BidR8="
+        }
+      ]
+    },
+    {
+      "Route": "css/site.4fhqdgkndy.css",
+      "AssetFile": "C:\\Users\\gabri\\PF-DSW\\PoliclinicoWeb\\wwwroot\\css\\site.css",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "6565"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "text/css"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"ULgLjE34eR7GmWBLpuKYuiMY7Q6qxFuqAAQ03S5aglE=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Sat, 06 Dec 2025 00:00:41 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=31536000, immutable"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "fingerprint",
+          "Value": "4fhqdgkndy"
+        },
+        {
+          "Name": "label",
+          "Value": "css/site.css"
+        },
+        {
+          "Name": "integrity",
+          "Value": "sha256-ULgLjE34eR7GmWBLpuKYuiMY7Q6qxFuqAAQ03S5aglE="
+        }
+      ]
+    },
+    {
+      "Route": "css/site.css",
+      "AssetFile": "C:\\Users\\gabri\\PF-DSW\\PoliclinicoWeb\\wwwroot\\css\\site.css",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "6565"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "text/css"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"ULgLjE34eR7GmWBLpuKYuiMY7Q6qxFuqAAQ03S5aglE=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Sat, 06 Dec 2025 00:00:41 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "no-cache"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "integrity",
+          "Value": "sha256-ULgLjE34eR7GmWBLpuKYuiMY7Q6qxFuqAAQ03S5aglE="
+        }
+      ]
+    },
+    {
+      "Route": "js/reserva-cita.7ozan3bw9v.js",
+      "AssetFile": "C:\\Users\\gabri\\PF-DSW\\PoliclinicoWeb\\wwwroot\\js\\reserva-cita.js",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "11019"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "text/javascript"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"F+bHmOKYqelCs/hVGe1xn3vCY8YUgnrLyyi6BuW1dRs=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Fri, 05 Dec 2025 23:22:11 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=31536000, immutable"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "fingerprint",
+          "Value": "7ozan3bw9v"
+        },
+        {
+          "Name": "label",
+          "Value": "js/reserva-cita.js"
+        },
+        {
+          "Name": "integrity",
+          "Value": "sha256-F+bHmOKYqelCs/hVGe1xn3vCY8YUgnrLyyi6BuW1dRs="
+        }
+      ]
+    },
+    {
+      "Route": "js/reserva-cita.js",
+      "AssetFile": "C:\\Users\\gabri\\PF-DSW\\PoliclinicoWeb\\wwwroot\\js\\reserva-cita.js",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "11019"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "text/javascript"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"F+bHmOKYqelCs/hVGe1xn3vCY8YUgnrLyyi6BuW1dRs=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Fri, 05 Dec 2025 23:22:11 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "no-cache"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "integrity",
+          "Value": "sha256-F+bHmOKYqelCs/hVGe1xn3vCY8YUgnrLyyi6BuW1dRs="
+        }
+      ]
+    },
+    {
+      "Route": "js/site.js",
+      "AssetFile": "C:\\Users\\gabri\\PF-DSW\\PoliclinicoWeb\\wwwroot\\js\\site.js",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "8507"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "text/javascript"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"IY1yrWX22CVSv6FYu2fqUIujFkSv3TzRSG4+xpKB65U=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Fri, 05 Dec 2025 23:22:09 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "no-cache"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "integrity",
+          "Value": "sha256-IY1yrWX22CVSv6FYu2fqUIujFkSv3TzRSG4+xpKB65U="
+        }
+      ]
+    },
+    {
+      "Route": "js/site.xo6hdlzagv.js",
+      "AssetFile": "C:\\Users\\gabri\\PF-DSW\\PoliclinicoWeb\\wwwroot\\js\\site.js",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "8507"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "text/javascript"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"IY1yrWX22CVSv6FYu2fqUIujFkSv3TzRSG4+xpKB65U=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Fri, 05 Dec 2025 23:22:09 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=31536000, immutable"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "fingerprint",
+          "Value": "xo6hdlzagv"
+        },
+        {
+          "Name": "label",
+          "Value": "js/site.js"
+        },
+        {
+          "Name": "integrity",
+          "Value": "sha256-IY1yrWX22CVSv6FYu2fqUIujFkSv3TzRSG4+xpKB65U="
+        }
+      ]
+    },
+    {
+      "Route": "js/validaciones.js",
+      "AssetFile": "C:\\Users\\gabri\\PF-DSW\\PoliclinicoWeb\\wwwroot\\js\\validaciones.js",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "11183"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "text/javascript"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"ZkQKfEjDgP636EY7SaTd+hMI0LrBdko+5nRa8aEONK4=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Sat, 06 Dec 2025 14:37:51 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "no-cache"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "integrity",
+          "Value": "sha256-ZkQKfEjDgP636EY7SaTd+hMI0LrBdko+5nRa8aEONK4="
+        }
+      ]
+    },
+    {
+      "Route": "js/validaciones.q8afimrf7k.js",
+      "AssetFile": "C:\\Users\\gabri\\PF-DSW\\PoliclinicoWeb\\wwwroot\\js\\validaciones.js",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "11183"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "text/javascript"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"ZkQKfEjDgP636EY7SaTd+hMI0LrBdko+5nRa8aEONK4=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Sat, 06 Dec 2025 14:37:51 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=31536000, immutable"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "fingerprint",
+          "Value": "q8afimrf7k"
+        },
+        {
+          "Name": "label",
+          "Value": "js/validaciones.js"
+        },
+        {
+          "Name": "integrity",
+          "Value": "sha256-ZkQKfEjDgP636EY7SaTd+hMI0LrBdko+5nRa8aEONK4="
+        }
+      ]
+    }
+  ]
+}

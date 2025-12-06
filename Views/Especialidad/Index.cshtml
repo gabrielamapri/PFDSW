@@ -1,0 +1,158 @@
+@{
+    ViewData["Title"] = "Especialidades";
+}
+
+<div class="container mt-4">
+    <div class="card">
+        <div class="card-header">
+            <div class="d-flex justify-content-between align-items-center">
+                <h4 class="mb-0"><i class="fas fa-stethoscope"></i> Gestión de Especialidades</h4>
+                <button class="btn btn-light" onclick="abrirModalCrear()">
+                    <i class="fas fa-plus"></i> Nueva Especialidad
+                </button>
+            </div>
+        </div>
+        <div class="card-body">
+            <table id="tableEspecialidades" class="table table-striped table-hover">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Nombre</th>
+                        <th>Descripción</th>
+                        <th>Estado</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="modalEspecialidad" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalTitle">Nueva Especialidad</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <form id="formEspecialidad">
+                    <input type="hidden" id="especialidadId">
+                    <div class="mb-3">
+                        <label class="form-label">Nombre</label>
+                        <input type="text" class="form-control" id="nombre" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Descripción</label>
+                        <textarea class="form-control" id="descripcion" rows="3"></textarea>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Estado</label>
+                        <select class="form-select" id="activo">
+                            <option value="true">Activo</option>
+                            <option value="false">Inactivo</option>
+                        </select>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-primary" onclick="guardarEspecialidad()">Guardar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        let table;
+        $(document).ready(function() {
+            cargarTabla();
+        });
+
+        function cargarTabla() {
+            if ($.fn.DataTable.isDataTable('#tableEspecialidades')) {
+                $('#tableEspecialidades').DataTable().destroy();
+            }
+            table = $('#tableEspecialidades').DataTable({
+                ajax: {
+                    url: '/Especialidad/Listar',
+                    dataSrc: ''
+                },
+                columns: [
+                    { data: 'idEspecialidad' },
+                    { data: 'nombre' },
+                    { data: 'descripcion' },
+                    { data: 'activo', render: data => data ? '<span class="badge bg-success">Activo</span>' : '<span class="badge bg-danger">Inactivo</span>' },
+                    { data: null, render: data => `<button class="btn btn-sm btn-warning" onclick="editarEspecialidad(${data.idEspecialidad})"><i class="fas fa-edit"></i></button> <button class="btn btn-sm btn-danger" onclick="eliminarEspecialidad(${data.idEspecialidad})"><i class="fas fa-trash"></i></button>` }
+                ],
+                language: { url: '//cdn.datatables.net/plug-ins/1.13.7/i18n/es-ES.json' }
+            });
+        }
+
+        function abrirModalCrear() {
+            $('#modalTitle').text('Nueva Especialidad');
+            $('#formEspecialidad')[0].reset();
+            $('#especialidadId').val('0');
+            $('#modalEspecialidad').modal('show');
+        }
+
+        function editarEspecialidad(id) {
+            $.get('/Especialidad/Obtener/' + id, function(data) {
+                $('#modalTitle').text('Editar Especialidad');
+                $('#especialidadId').val(data.idEspecialidad);
+                $('#nombre').val(data.nombre);
+                $('#descripcion').val(data.descripcion);
+                $('#activo').val(data.activo.toString());
+                $('#modalEspecialidad').modal('show');
+            });
+        }
+
+        function guardarEspecialidad() {
+            $.ajax({
+                url: '/Especialidad/Guardar',
+                type: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify({
+                    idEspecialidad: $('#especialidadId').val() || 0,
+                    nombre: $('#nombre').val(),
+                    descripcion: $('#descripcion').val(),
+                    activo: $('#activo').val() === 'true'
+                }),
+                success: function(response) {
+                    if (response.success) {
+                        Swal.fire('Éxito', response.message, 'success');
+                        $('#modalEspecialidad').modal('hide');
+                        cargarTabla();
+                    } else {
+                        Swal.fire('Error', response.message, 'error');
+                    }
+                }
+            });
+        }
+
+        function eliminarEspecialidad(id) {
+            Swal.fire({
+                title: '¿Estás seguro?',
+                text: 'Esta acción no se puede revertir',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'Sí, eliminar'
+            }).then(result => {
+                if (result.isConfirmed) {
+                    $.ajax({
+                        url: '/Especialidad/Eliminar/' + id,
+                        type: 'DELETE',
+                        success: function(response) {
+                            if (response.success) {
+                                Swal.fire('Eliminado', response.message, 'success');
+                                cargarTabla();
+                            }
+                        }
+                    });
+                }
+            });
+        }
+    </script>
+}

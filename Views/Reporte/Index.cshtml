@@ -1,0 +1,493 @@
+@{
+    ViewData["Title"] = "Reportes";
+}
+
+<style>
+    .nav-tabs {
+        border-bottom: 2px solid #dee2e6;
+    }
+    .nav-tabs .nav-link {
+        color: #495057;
+        font-weight: 600;
+        border: 2px solid transparent;
+        padding: 12px 20px;
+        transition: all 0.3s;
+    }
+    .nav-tabs .nav-link:hover {
+        color: #667eea;
+        border-color: transparent;
+    }
+    .nav-tabs .nav-link.active {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white !important;
+        border: none;
+        border-radius: 8px 8px 0 0;
+    }
+    .chart-container {
+        position: relative;
+        height: 350px;
+        margin-bottom: 20px;
+    }
+    .stat-card {
+        border-left: 4px solid;
+        transition: transform 0.2s;
+    }
+    .stat-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+    }
+</style>
+
+<div class="container-fluid mt-4">
+    <div class="card shadow-sm">
+        <div class="card-header bg-gradient text-white" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+            <h4 class="mb-0"><i class="fas fa-chart-line"></i> Reportes y Estadísticas del Sistema</h4>
+        </div>
+        <div class="card-body p-4">
+            <!-- Tabs de navegación -->
+            <ul class="nav nav-tabs mb-4" role="tablist">
+                <li class="nav-item">
+                    <a class="nav-link active" data-bs-toggle="tab" href="#tab-especialidades">
+                        <i class="fas fa-stethoscope"></i> Citas por Especialidad
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" data-bs-toggle="tab" href="#tab-doctores">
+                        <i class="fas fa-user-md"></i> Citas por Doctor
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" data-bs-toggle="tab" href="#tab-estados">
+                        <i class="fas fa-chart-pie"></i> Estados de Citas
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" data-bs-toggle="tab" href="#tab-pacientes">
+                        <i class="fas fa-users"></i> Pacientes Frecuentes
+                    </a>
+                </li>
+            </ul>
+
+            <!-- Contenido de tabs -->
+            <div class="tab-content">
+                <!-- Tab 1: Citas por Especialidad -->
+                <div id="tab-especialidades" class="tab-pane fade show active">
+                    <h5 class="mb-3"><i class="fas fa-filter"></i> Filtros de Búsqueda</h5>
+                    <div class="row mb-4">
+                        <div class="col-md-3">
+                            <label class="form-label fw-bold">Fecha Inicio</label>
+                            <input type="date" class="form-control" id="fechaInicioEsp">
+                        </div>
+                        <div class="col-md-3">
+                            <label class="form-label fw-bold">Fecha Fin</label>
+                            <input type="date" class="form-control" id="fechaFinEsp">
+                        </div>
+                        <div class="col-md-3">
+                            <label class="form-label">&nbsp;</label>
+                            <button class="btn btn-primary w-100" onclick="cargarReporteEspecialidades()">
+                                <i class="fas fa-search"></i> Generar Reporte
+                            </button>
+                        </div>
+                        <div class="col-md-3">
+                            <label class="form-label">&nbsp;</label>
+                            <button class="btn btn-outline-secondary w-100" onclick="limpiarFiltrosEsp()">
+                                <i class="fas fa-eraser"></i> Limpiar
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-lg-7">
+                            <div class="card shadow-sm">
+                                <div class="card-body">
+                                    <h5 class="card-title"><i class="fas fa-chart-bar"></i> Gráfico de Citas</h5>
+                                    <div class="chart-container">
+                                        <canvas id="chartEspecialidades"></canvas>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-5">
+                            <div class="card shadow-sm">
+                                <div class="card-body">
+                                    <h5 class="card-title"><i class="fas fa-table"></i> Detalles</h5>
+                                    <div class="table-responsive">
+                                        <table class="table table-hover table-sm" id="tablaEspecialidades">
+                                            <thead class="table-light">
+                                                <tr>
+                                                    <th>Especialidad</th>
+                                                    <th class="text-center">Total</th>
+                                                    <th class="text-center">Pendientes</th>
+                                                    <th class="text-center">Confirmadas</th>
+                                                    <th class="text-center">Atendidas</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody></tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tab 2: Citas por Doctor -->
+                <div id="tab-doctores" class="tab-pane fade">
+                    <h5 class="mb-3"><i class="fas fa-filter"></i> Filtros de Búsqueda</h5>
+                    <div class="row mb-4">
+                        <div class="col-md-3">
+                            <label class="form-label fw-bold">Fecha Inicio</label>
+                            <input type="date" class="form-control" id="fechaInicioDoc">
+                        </div>
+                        <div class="col-md-3">
+                            <label class="form-label fw-bold">Fecha Fin</label>
+                            <input type="date" class="form-control" id="fechaFinDoc">
+                        </div>
+                        <div class="col-md-2">
+                            <label class="form-label fw-bold">Estado</label>
+                            <select class="form-select" id="estadoDoc">
+                                <option value="">Todos</option>
+                                <option value="Pendiente">Pendiente</option>
+                                <option value="Confirmada">Confirmada</option>
+                                <option value="Atendida">Atendida</option>
+                                <option value="Cancelada">Cancelada</option>
+                            </select>
+                        </div>
+                        <div class="col-md-2">
+                            <label class="form-label">&nbsp;</label>
+                            <button class="btn btn-primary w-100" onclick="cargarReporteDoctores()">
+                                <i class="fas fa-search"></i> Buscar
+                            </button>
+                        </div>
+                        <div class="col-md-2">
+                            <label class="form-label">&nbsp;</label>
+                            <button class="btn btn-outline-secondary w-100" onclick="limpiarFiltrosDoc()">
+                                <i class="fas fa-eraser"></i> Limpiar
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="card shadow-sm">
+                        <div class="card-body">
+                            <h5 class="card-title"><i class="fas fa-list"></i> Reporte de Doctores</h5>
+                            <div class="table-responsive">
+                                <table class="table table-striped table-hover" id="tablaDoctores">
+                                    <thead class="table-dark">
+                                        <tr>
+                                            <th><i class="fas fa-user-md"></i> Doctor</th>
+                                            <th><i class="fas fa-stethoscope"></i> Especialidad</th>
+                                            <th class="text-center">Total Citas</th>
+                                            <th class="text-center">Pendientes</th>
+                                            <th class="text-center">Confirmadas</th>
+                                            <th class="text-center">Atendidas</th>
+                                            <th class="text-center">Canceladas</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody></tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tab 3: Citas por Estado -->
+                <div id="tab-estados" class="tab-pane fade">
+                    <h5 class="mb-3"><i class="fas fa-info-circle"></i> Distribución de Citas por Estado</h5>
+                    <div class="row justify-content-center">
+                        <div class="col-lg-6">
+                            <div class="card shadow-sm">
+                                <div class="card-body">
+                                    <h5 class="card-title text-center"><i class="fas fa-chart-pie"></i> Gráfico Circular</h5>
+                                    <div class="chart-container">
+                                        <canvas id="chartEstados"></canvas>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-6">
+                            <div class="card shadow-sm">
+                                <div class="card-body">
+                                    <h5 class="card-title"><i class="fas fa-percentage"></i> Estadísticas</h5>
+                                    <div class="table-responsive mt-4">
+                                        <table class="table table-bordered table-hover">
+                                            <thead class="table-light">
+                                                <tr>
+                                                    <th>Estado</th>
+                                                    <th class="text-center">Cantidad</th>
+                                                    <th class="text-center">Porcentaje</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody id="tablaEstados"></tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tab 4: Pacientes Frecuentes -->
+                <div id="tab-pacientes" class="tab-pane fade">
+                    <div class="row mb-4">
+                        <div class="col-md-3">
+                            <label class="form-label fw-bold">Mostrar Top</label>
+                            <select class="form-select" id="topPacientes" onchange="cargarReportePacientes()">
+                                <option value="5">Top 5 Pacientes</option>
+                                <option value="10" selected>Top 10 Pacientes</option>
+                                <option value="20">Top 20 Pacientes</option>
+                                <option value="50">Top 50 Pacientes</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-lg-6">
+                            <div class="card shadow-sm">
+                                <div class="card-body">
+                                    <h5 class="card-title"><i class="fas fa-chart-bar"></i> Ranking de Pacientes</h5>
+                                    <div class="chart-container">
+                                        <canvas id="chartPacientes"></canvas>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-6">
+                            <div class="card shadow-sm">
+                                <div class="card-body">
+                                    <h5 class="card-title"><i class="fas fa-trophy"></i> Pacientes Más Frecuentes</h5>
+                                    <div class="table-responsive">
+                                        <table class="table table-hover">
+                                            <thead class="table-light">
+                                                <tr>
+                                                    <th class="text-center">#</th>
+                                                    <th>Paciente</th>
+                                                    <th>DNI</th>
+                                                    <th class="text-center">Total Citas</th>
+                                                    <th>Última Cita</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody id="tablaPacientes"></tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    let chartEsp, chartEst, chartPac;
+
+    $(document).ready(function() {
+        // Cargar reportes iniciales
+        cargarReporteEspecialidades();
+        cargarReporteDoctores();
+        cargarReporteEstados();
+        cargarReportePacientes();
+    });
+
+    function limpiarFiltrosEsp() {
+        $('#fechaInicioEsp').val('');
+        $('#fechaFinEsp').val('');
+        cargarReporteEspecialidades();
+    }
+
+    function limpiarFiltrosDoc() {
+        $('#fechaInicioDoc').val('');
+        $('#fechaFinDoc').val('');
+        $('#estadoDoc').val('');
+        cargarReporteDoctores();
+    }
+
+    function cargarReporteEspecialidades() {
+        const fechaInicio = $('#fechaInicioEsp').val();
+        const fechaFin = $('#fechaFinEsp').val();
+
+        $.get('/Reporte/CitasPorEspecialidad', { fechaInicio, fechaFin }, function(data) {
+            // Llenar tabla
+            let html = '';
+            data.forEach(item => {
+                html += `
+                    <tr>
+                        <td><strong>${item.nombreEspecialidad}</strong></td>
+                        <td class="text-center"><span class="badge bg-primary">${item.totalCitas}</span></td>
+                        <td class="text-center"><span class="badge bg-warning text-dark">${item.citasPendientes}</span></td>
+                        <td class="text-center"><span class="badge bg-success">${item.citasConfirmadas}</span></td>
+                        <td class="text-center"><span class="badge bg-info">${item.citasAtendidas}</span></td>
+                    </tr>
+                `;
+            });
+            $('#tablaEspecialidades tbody').html(html || '<tr><td colspan="5" class="text-center text-muted">No hay datos disponibles</td></tr>');
+
+            // Actualizar gráfico
+            const labels = data.map(x => x.nombreEspecialidad);
+            const totales = data.map(x => x.totalCitas);
+
+            if (chartEsp) chartEsp.destroy();
+            chartEsp = new Chart(document.getElementById('chartEspecialidades'), {
+                type: 'bar',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Total de Citas',
+                        data: totales,
+                        backgroundColor: 'rgba(102, 126, 234, 0.6)',
+                        borderColor: 'rgba(102, 126, 234, 1)',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        title: {
+                            display: true,
+                            text: 'Citas por Especialidad'
+                        }
+                    },
+                    scales: {
+                        y: { beginAtZero: true }
+                    }
+                }
+            });
+        });
+    }
+
+    function cargarReporteDoctores() {
+        const fechaInicio = $('#fechaInicioDoc').val();
+        const fechaFin = $('#fechaFinDoc').val();
+        const estado = $('#estadoDoc').val();
+
+        $.get('/Reporte/CitasPorDoctor', { fechaInicio, fechaFin, estado }, function(data) {
+            let html = '';
+            data.forEach(item => {
+                html += `
+                    <tr>
+                        <td>${item.nombreDoctor}</td>
+                        <td>${item.especialidad}</td>
+                        <td><strong>${item.totalCitas}</strong></td>
+                        <td><span class="badge bg-warning">${item.citasPendientes}</span></td>
+                        <td><span class="badge bg-success">${item.citasConfirmadas}</span></td>
+                        <td><span class="badge bg-info">${item.citasAtendidas}</span></td>
+                        <td><span class="badge bg-danger">${item.citasCanceladas}</span></td>
+                    </tr>
+                `;
+            });
+            $('#tablaDoctores tbody').html(html || '<tr><td colspan="7" class="text-center">No hay datos</td></tr>');
+        });
+    }
+
+    function cargarReporteEstados() {
+        $.get('/Reporte/CitasPorEstado', function(data) {
+            const total = data.reduce((sum, item) => sum + item.total, 0);
+            
+            // Llenar tabla
+            let html = '';
+            data.forEach(item => {
+                const porcentaje = ((item.total / total) * 100).toFixed(1);
+                html += `
+                    <tr>
+                        <td>${item.estado}</td>
+                        <td><strong>${item.total}</strong></td>
+                        <td>${porcentaje}%</td>
+                    </tr>
+                `;
+            });
+            $('#tablaEstados').html(html);
+
+            // Actualizar gráfico de dona
+            const labels = data.map(x => x.estado);
+            const valores = data.map(x => x.total);
+            const colores = {
+                'Pendiente': 'rgba(255, 193, 7, 0.8)',
+                'Confirmada': 'rgba(40, 167, 69, 0.8)',
+                'Atendida': 'rgba(23, 162, 184, 0.8)',
+                'Cancelada': 'rgba(220, 53, 69, 0.8)'
+            };
+
+            if (chartEst) chartEst.destroy();
+            chartEst = new Chart(document.getElementById('chartEstados'), {
+                type: 'doughnut',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        data: valores,
+                        backgroundColor: labels.map(l => colores[l] || 'rgba(128, 128, 128, 0.8)')
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        title: {
+                            display: true,
+                            text: 'Distribución de Citas por Estado'
+                        },
+                        legend: {
+                            position: 'bottom'
+                        }
+                    }
+                }
+            });
+        });
+    }
+
+    function cargarReportePacientes() {
+        const top = $('#topPacientes').val();
+
+        $.get('/Reporte/PacientesFrecuentes', { top }, function(data) {
+            // Llenar tabla
+            let html = '';
+            data.forEach((item, index) => {
+                const fecha = new Date(item.ultimaCita).toLocaleDateString('es-ES');
+                html += `
+                    <tr>
+                        <td><strong>${index + 1}</strong></td>
+                        <td>${item.nombrePaciente}</td>
+                        <td>${item.dni}</td>
+                        <td><span class="badge bg-primary">${item.totalCitas}</span></td>
+                        <td>${fecha}</td>
+                    </tr>
+                `;
+            });
+            $('#tablaPacientes').html(html);
+
+            // Actualizar gráfico
+            const labels = data.map(x => x.nombrePaciente);
+            const totales = data.map(x => x.totalCitas);
+
+            if (chartPac) chartPac.destroy();
+            chartPac = new Chart(document.getElementById('chartPacientes'), {
+                type: 'horizontalBar',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Total de Citas',
+                        data: totales,
+                        backgroundColor: 'rgba(118, 75, 162, 0.6)',
+                        borderColor: 'rgba(118, 75, 162, 1)',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    indexAxis: 'y',
+                    responsive: true,
+                    plugins: {
+                        title: {
+                            display: true,
+                            text: `Top ${top} Pacientes Más Frecuentes`
+                        }
+                    },
+                    scales: {
+                        x: { beginAtZero: true }
+                    }
+                }
+            });
+        });
+    }
+</script>
+}

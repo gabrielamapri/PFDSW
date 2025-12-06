@@ -1,0 +1,345 @@
+@{
+    ViewData["Title"] = "Reservar Cita";
+}
+
+<div class="container mt-4">
+    <div class="card">
+        <div class="card-header">
+            <h4 class="mb-0"><i class="fas fa-calendar-plus"></i> Reservar Nueva Cita Médica</h4>
+        </div>
+        <div class="card-body">
+            <!-- Indicador de pasos -->
+            <div class="row mb-4">
+                <div class="col-12">
+                    <div class="d-flex justify-content-between">
+                        <div class="step-item active" id="step-indicator-1">
+                            <div class="step-number">1</div>
+                            <div class="step-label">Especialidad</div>
+                        </div>
+                        <div class="step-item" id="step-indicator-2">
+                            <div class="step-number">2</div>
+                            <div class="step-label">Doctor</div>
+                        </div>
+                        <div class="step-item" id="step-indicator-3">
+                            <div class="step-number">3</div>
+                            <div class="step-label">Fecha y Hora</div>
+                        </div>
+                        <div class="step-item" id="step-indicator-4">
+                            <div class="step-number">4</div>
+                            <div class="step-label">Confirmar</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Paso 1: Seleccionar Especialidad -->
+            <div class="wizard-step" id="step-1">
+                <h5 class="mb-3">Selecciona la Especialidad Médica</h5>
+                <div class="row" id="especialidades-container"></div>
+                <button class="btn btn-secondary mt-3" disabled>Anterior</button>
+            </div>
+
+            <!-- Paso 2: Seleccionar Doctor -->
+            <div class="wizard-step d-none" id="step-2">
+                <h5 class="mb-3">Selecciona el Doctor</h5>
+                <div class="row" id="doctores-container"></div>
+                <button class="btn btn-secondary mt-3" onclick="irPaso(1)">Anterior</button>
+            </div>
+
+            <!-- Paso 3: Seleccionar Fecha y Hora -->
+            <div class="wizard-step d-none" id="step-3">
+                <h5 class="mb-3">Selecciona Fecha y Hora</h5>
+                <div class="alert alert-info" id="info-dias-atencion" style="display:none;">
+                    <i class="fas fa-info-circle"></i> <strong>Días de atención:</strong> <span id="dias-disponibles"></span>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <label class="form-label">Fecha de la Cita</label>
+                        <input type="date" class="form-control" id="fechaCita" disabled>
+                        <small class="text-muted">Días de atención: <span id="dias-info" class="fw-bold text-primary"></span></small>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">Hora Disponible</label>
+                        <select class="form-select" id="horaCita">
+                            <option value="">Selecciona primero una fecha</option>
+                        </select>
+                    </div>
+                    <div class="col-12 mt-3">
+                        <label class="form-label">Motivo de la Consulta</label>
+                        <textarea class="form-control" id="motivo" rows="3" placeholder="Describe brevemente el motivo de tu consulta"></textarea>
+                    </div>
+                </div>
+                <button class="btn btn-secondary mt-3" onclick="irPaso(2)">Anterior</button>
+                <button class="btn btn-primary mt-3" onclick="irPaso(4)">Siguiente</button>
+            </div>
+
+            <!-- Paso 4: Confirmar -->
+            <div class="wizard-step d-none" id="step-4">
+                <h5 class="mb-3">Confirmar Reserva</h5>
+                <div class="alert alert-info">
+                    <h6>Resumen de tu Cita:</h6>
+                    <p><strong>Especialidad:</strong> <span id="resumen-especialidad"></span></p>
+                    <p><strong>Doctor:</strong> Dr(a). <span id="resumen-doctor"></span></p>
+                    <p><strong>Fecha:</strong> <span id="resumen-fecha"></span></p>
+                    <p><strong>Hora:</strong> <span id="resumen-hora"></span></p>
+                    <p><strong>Motivo:</strong> <span id="resumen-motivo"></span></p>
+                </div>
+                <button class="btn btn-secondary mt-3" onclick="irPaso(3)">Anterior</button>
+                <button class="btn btn-success mt-3" onclick="confirmarCita()">
+                    <i class="fas fa-check"></i> Confirmar Reserva
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+.step-item {
+    text-align: center;
+    flex: 1;
+    position: relative;
+}
+.step-number {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: #e0e0e0;
+    color: #666;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 8px;
+    font-weight: bold;
+}
+.step-item.active .step-number {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+}
+.step-label {
+    font-size: 0.875rem;
+    color: #666;
+}
+.step-item.active .step-label {
+    color: #667eea;
+    font-weight: 600;
+}
+.card-especialidad, .card-doctor {
+    cursor: pointer;
+    transition: all 0.3s;
+}
+.card-especialidad:hover, .card-doctor:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 5px 20px rgba(0,0,0,0.2) !important;
+}
+</style>
+
+@section Scripts {
+<script>
+    let datosReserva = {
+        idEspecialidad: 0,
+        nombreEspecialidad: '',
+        idDoctor: 0,
+        nombreDoctor: '',
+        fechaCita: '',
+        horaCita: '',
+        motivo: ''
+    };
+
+    let diasAtencionDoctor = [];
+    let diasNumericosPermitidos = [];
+
+    $(document).ready(function() {
+        cargarEspecialidades();
+        
+        // Establecer fecha mínima como hoy
+        const today = new Date();
+        $('#fechaCita').attr('min', today.toISOString().split('T')[0]);
+        
+        // Validar cuando cambia la fecha
+        $('#fechaCita').on('change', function() {
+            validarFechaYCargarHorarios();
+        });
+    });
+
+    function cargarEspecialidades() {
+        $.get('/Cita/ObtenerEspecialidades', function(data) {
+            let html = '';
+            data.forEach(esp => {
+                html += `
+                    <div class="col-md-4 mb-3">
+                        <div class="card card-especialidad" onclick="seleccionarEspecialidad(${esp.idEspecialidad}, '${esp.nombre}')">
+                            <div class="card-body text-center">
+                                <div class="icon-box primary mb-2"><i class="fas fa-stethoscope"></i></div>
+                                <h6>${esp.nombre}</h6>
+                                <p class="text-muted small mb-0">${esp.descripcion || ''}</p>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            });
+            $('#especialidades-container').html(html);
+        });
+    }
+
+    function seleccionarEspecialidad(id, nombre) {
+        datosReserva.idEspecialidad = id;
+        datosReserva.nombreEspecialidad = nombre;
+        cargarDoctores(id);
+        irPaso(2);
+    }
+
+    function cargarDoctores(idEspecialidad) {
+        $.get('/Cita/ObtenerDoctoresPorEspecialidad?idEspecialidad=' + idEspecialidad, function(data) {
+            let html = '';
+            data.forEach(doc => {
+                html += `
+                    <div class="col-md-6 mb-3">
+                        <div class="card card-doctor" onclick="seleccionarDoctor(${doc.idDoctor}, '${doc.nombreCompleto}')">
+                            <div class="card-body">
+                                <div class="d-flex align-items-center">
+                                    <div class="icon-box success me-3"><i class="fas fa-user-md"></i></div>
+                                    <div>
+                                        <h6 class="mb-0">Dr(a). ${doc.nombreCompleto}</h6>
+                                        <small class="text-muted">CMP: ${doc.cmp || doc.CMP || 'N/A'} ${doc.rne ? ('| RNE: ' + doc.rne) : ''}</small>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            });
+            $('#doctores-container').html(html || '<div class="col-12"><p class="text-center text-muted">No hay doctores disponibles</p></div>');
+        });
+    }
+
+    function seleccionarDoctor(id, nombre) {
+        datosReserva.idDoctor = id;
+        datosReserva.nombreDoctor = nombre;
+        
+        // Cargar días de atención del doctor
+        $.get('/Cita/ObtenerDiasAtencion?idDoctor=' + id, function(data) {
+            diasAtencionDoctor = data;
+            diasNumericosPermitidos = data.map(dia => convertirDiaANumero(dia));
+            
+            // Mostrar días disponibles
+            $('#dias-info').text(data.join(', '));
+            $('#dias-disponibles').text(data.join(', '));
+            $('#info-dias-atencion').show();
+            
+            // Habilitar input de fecha
+            $('#fechaCita').prop('disabled', false);
+        });
+        
+        irPaso(3);
+    }
+
+    function convertirDiaANumero(nombreDia) {
+        const mapaDias = {
+            'Domingo': 0,
+            'Lunes': 1,
+            'Martes': 2,
+            'Miércoles': 3,
+            'Jueves': 4,
+            'Viernes': 5,
+            'Sábado': 6
+        };
+        return mapaDias[nombreDia];
+    }
+
+    function obtenerNombreDia(numeroDia) {
+        const dias = ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'];
+        return dias[numeroDia];
+    }
+
+    function validarFechaYCargarHorarios() {
+        const fechaSeleccionada = $('#fechaCita').val();
+        if (!fechaSeleccionada) return;
+        
+        const fecha = new Date(fechaSeleccionada + 'T00:00:00');
+        const numeroDia = fecha.getDay();
+        
+        if (!diasNumericosPermitidos.includes(numeroDia)) {
+            const nombreDia = obtenerNombreDia(numeroDia);
+            Swal.fire({
+                icon: 'warning',
+                title: 'Día no disponible',
+                html: `El doctor <strong>no atiende los ${nombreDia}s</strong>.<br><br>Días de atención: <strong>${diasAtencionDoctor.join(', ')}</strong>`,
+                confirmButtonText: 'Entendido'
+            });
+            $('#fechaCita').val('');
+            $('#horaCita').html('<option value="">Selecciona una fecha válida</option>');
+            return;
+        }
+        
+        cargarHorarios();
+    }
+
+    function cargarHorarios() {
+        const fecha = $('#fechaCita').val();
+        if (!fecha) return;
+
+        $.get('/Cita/ObtenerHorariosDisponibles?idDoctor=' + datosReserva.idDoctor + '&fecha=' + fecha, function(data) {
+            let html = '<option value="">Selecciona una hora</option>';
+            if (data && data.length > 0) {
+                data.forEach(hora => {
+                    html += `<option value="${hora}">${hora}</option>`;
+                });
+            } else {
+                html = '<option value="">No hay horarios disponibles</option>';
+            }
+            $('#horaCita').html(html);
+        });
+    }
+
+    function irPaso(paso) {
+        $('.wizard-step').addClass('d-none');
+        $('#step-' + paso).removeClass('d-none');
+        $('.step-item').removeClass('active');
+        $('#step-indicator-' + paso).addClass('active');
+
+        if (paso === 4) {
+            datosReserva.horaCita = $('#horaCita').val();
+            datosReserva.motivo = $('#motivo').val();
+            $('#resumen-especialidad').text(datosReserva.nombreEspecialidad);
+            $('#resumen-doctor').text(datosReserva.nombreDoctor);
+            $('#resumen-fecha').text(new Date(datosReserva.fechaCita).toLocaleDateString('es-ES'));
+            $('#resumen-hora').text(datosReserva.horaCita);
+            $('#resumen-motivo').text(datosReserva.motivo || 'No especificado');
+        }
+    }
+
+    function confirmarCita() {
+        const cita = {
+            idDoctor: datosReserva.idDoctor,
+            fechaCita: datosReserva.fechaCita,
+            horaCita: datosReserva.horaCita,
+            motivo: datosReserva.motivo || ''
+        };
+
+        $.ajax({
+            url: '/Cita/CrearCita',
+            type: 'POST',
+            contentType: 'application/json',
+            data: JSON.stringify(cita),
+            success: function(response) {
+                if (response.success) {
+                    Swal.fire({
+                        icon: 'success',
+                        title: '¡Cita Reservada!',
+                        text: response.message,
+                        confirmButtonText: 'Ver Mis Citas'
+                    }).then(() => {
+                        window.location.href = '/Cita/MisCitas';
+                    });
+                } else {
+                    Swal.fire('Error', response.message, 'error');
+                }
+            },
+            error: function(xhr, status, error) {
+                console.error('Error:', xhr.responseText);
+                Swal.fire('Error', xhr.responseJSON?.message || 'Error al reservar la cita', 'error');
+            }
+        });
+    }
+</script>
+}

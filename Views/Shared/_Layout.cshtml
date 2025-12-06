@@ -1,0 +1,75 @@
+﻿<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - Sistema Policlinico</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.7/css/dataTables.bootstrap5.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <link rel="stylesheet" href="~/css/estilos-nuevos-2025.css?v=999" />
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <div class="container">
+            <a class="navbar-brand" href="/"><i class="fas fa-hospital"></i> Policlinico Web</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"><span class="navbar-toggler-icon"></span></button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    @if (Context.Session.GetString("Usuario") != null)
+                    {
+                        var tipoUsuario = Context.Session.GetString("TipoUsuario");
+                        var nombreCompleto = Context.Session.GetString("NombreCompleto") ?? Context.Session.GetString("Usuario");
+                        <li class="nav-item"><a class="nav-link" href="/Home/Index"><i class="fas fa-home"></i> Inicio</a></li>
+                        
+                        @if (tipoUsuario == "Admin")
+                        {
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"><i class="fas fa-cog"></i> Mantenimientos</a>
+                                <ul class="dropdown-menu">
+                                    <li><a class="dropdown-item" href="/Especialidad/Index"><i class="fas fa-stethoscope"></i> Especialidades</a></li>
+                                    <li><a class="dropdown-item" href="/Doctor/Index"><i class="fas fa-user-md"></i> Doctores</a></li>
+                                    <li><a class="dropdown-item" href="/Paciente/Index"><i class="fas fa-users"></i> Pacientes</a></li>
+                                    <li><hr class="dropdown-divider"></li>
+                                    <li><a class="dropdown-item" href="/Horario/Index"><i class="fas fa-clock"></i> Horarios</a></li>
+                                </ul>
+                            </li>
+                            <li class="nav-item"><a class="nav-link" href="/Reporte/Index"><i class="fas fa-chart-bar"></i> Reportes</a></li>
+                        }
+                        
+                        @if (tipoUsuario == "Doctor")
+                        {
+                            <li class="nav-item"><a class="nav-link" href="/Horario/Index"><i class="fas fa-clock"></i> Mis Horarios</a></li>
+                            <li class="nav-item"><a class="nav-link" href="/Cita/MiAgenda"><i class="fas fa-calendar-check"></i> Mi Agenda</a></li>
+                        }
+                        
+                        @if (tipoUsuario == "Paciente")
+                        {
+                            <li class="nav-item"><a class="nav-link" href="/Cita/ReservarCita"><i class="fas fa-calendar-plus"></i> Reservar Cita</a></li>
+                            <li class="nav-item"><a class="nav-link" href="/Cita/MisCitas"><i class="fas fa-calendar-alt"></i> Mis Citas</a></li>
+                        }
+                        
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"><i class="fas fa-user"></i> @nombreCompleto</a>
+                            <ul class="dropdown-menu">
+                                <li><a class="dropdown-item" href="/Account/Logout"><i class="fas fa-sign-out-alt"></i> Cerrar Sesión</a></li>
+                            </ul>
+                        </li>
+                    }
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <div class="container">@RenderBody()</div>
+    <footer class="text-center text-muted"><div class="container"><p class="mb-0">&copy; 2025 - Sistema Policlinico</p></div></footer>
+    <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.7/js/dataTables.bootstrap5.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/es.js"></script>
+    @RenderSection("Scripts", required: false)
+</body>
+</html>

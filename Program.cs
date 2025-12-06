@@ -30,7 +30,7 @@ builder.Services.AddScoped<PoliclinicoWeb.Data.IReporteData, PoliclinicoWeb.Data
 // Registrar ApplicationDbContext con la connection string de appsettings
 var cs = builder.Configuration.GetConnectionString("PoliclinicoDb");
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
-    options.UseSqlServer(cs)
+    options.UseMySql(cs, ServerVersion.AutoDetect(cs))
 );
 
 var app = builder.Build();
